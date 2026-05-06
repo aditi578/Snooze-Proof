@@ -7,4 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="off_white">#F8F9FA</color>
+    <color name="deep_charcoal">#121212</color>
+    <color name="soft_grey">#E0E0E0</color>
+
+    <color name="neon_mint">#00FFC2</color>
+    <color name="electric_blue">#2E5BFF</color>
+    <color name="punchy_coral">#FF7F50</color>
+    <color name="radiant_violet">#9D50FF</color>
 </resources>
