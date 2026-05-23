@@ -26,10 +26,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = Color(0xFFFFF9F9)
                     ) {
-                        Column {
-                            Header()
-                            FilterSection()
-                        }
+                        MainPage()
                     }
                 }
             }
@@ -38,17 +35,18 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun MainPage() {
+    Column {
+        Header()
+        FilterSection()
+        WorkCard()
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     SnoozeProofTheme {
-        Greeting("Android")
+        MainPage()
     }
 }
