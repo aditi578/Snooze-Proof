@@ -3,11 +3,14 @@ package com.example.snoozeproof
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,9 +18,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @Composable
 fun FilterSection() {
+    val filtersList = listOf("All", "Work", "Exercise", "Fun")
+    var selectedFilter by remember { mutableStateOf("All") }
+
     Row(
         modifier = Modifier
             .padding(horizontal = 20.dp, vertical = 8.dp),
@@ -31,61 +39,39 @@ fun FilterSection() {
             fontWeight = FontWeight.Medium
         )
 
-        Row(
+        LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            FilterChip(
-                selected = true,
-                onClick = { },
-                label = { Text("All", color = Color.White) },
-                shape = CircleShape,
-                colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = Color(0xFFFFB7C5),
-                    containerColor = Color.Transparent,
-                    selectedLabelColor = Color.White
-                ),
-                border = FilterChipDefaults.filterChipBorder(
-                    enabled = true,
-                    selected = true,
-                    borderColor = Color(0xFFFFD1DC),
-                    selectedBorderColor = Color(0xFFFFB7C5),
-                    borderWidth = 1.dp
-                )
-            )
+            items(count = filtersList.size) { index ->
+                val isSelected = selectedFilter == filtersList[index]
 
-            FilterChip(
-                selected = false,
-                onClick = { },
-                label = { Text("Work", color = Color(0xFF4A4A4A)) },
-                shape = CircleShape,
-                colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = Color(0xFFFFB7C5),
-                    containerColor = Color(0xFFFFF1F3)
-                ),
-                border = FilterChipDefaults.filterChipBorder(
-                    enabled = true,
-                    selected = false,
-                    borderColor = Color(0xFFFFD1DC),
-                    borderWidth = 1.dp
+                FilterChip(
+                    selected = isSelected,
+                    onClick = { selectedFilter = filtersList[index] },
+                    label = {
+                        Text(
+                            text = filtersList[index],
+                            color = if (isSelected) Color.White else Color(0xFF4A4A4A),
+                            fontSize = 14.sp,
+                            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+                        )
+                    },
+                    shape = CircleShape,
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = Color(0xFFFFB7C5),
+                        selectedLabelColor = Color.White,
+                        containerColor = Color(0xFFFFF0F2),
+                        labelColor = Color(0xFF4A4A4A)
+                    ),
+                    border = FilterChipDefaults.filterChipBorder(
+                        enabled = true,
+                        selected = isSelected,
+                        borderColor = Color(0xFFFFD1DC),
+                        selectedBorderColor = Color(0xFFFFB7C5),
+                        borderWidth = 1.dp
+                    )
                 )
-            )
-
-            FilterChip(
-                selected = true,
-                onClick = { },
-                label = { Text("Work", color = Color(0xFF4A4A4A)) },
-                shape = CircleShape,
-                colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = Color(0xFFFFB7C5),
-                    containerColor = Color(0xFFFFF1F3)
-                ),
-                border = FilterChipDefaults.filterChipBorder(
-                    enabled = true,
-                    selected = false,
-                    borderColor = Color(0xFFFFD1DC),
-                    borderWidth = 1.dp
-                )
-            )
+            }
         }
     }
 }
