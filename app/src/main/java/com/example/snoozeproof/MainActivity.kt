@@ -6,13 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.snoozeproof.ui.theme.ListOfBookMarks
 import com.example.snoozeproof.ui.theme.SnoozeProofTheme
 
@@ -22,12 +25,21 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SnoozeProofTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = Color(0xFFFFF9F9)
-                    ) {
-                        MainPage()
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = Color(0xFFFFF9F9)
+                ) {
+                    val navController = rememberNavController()
+
+                    NavHost(navController = navController, startDestination = "main") {
+                        composable("main") {
+                            MainScreen(onNavigateToAddScreen = {
+                                navController.navigate("add")
+                            })
+                        }
+                        composable("add") {
+                            AddBookmarkScreen()
+                        }
                     }
                 }
             }
@@ -36,11 +48,21 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainPage() {
-    Column {
-        Header()
-        FilterSection()
-        ListOfBookMarks()
+fun MainScreen(onNavigateToAddScreen: () -> Unit) {
+    Scaffold(
+        floatingActionButton = {
+            FloatingAddButton(onButtonClick = onNavigateToAddScreen)
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            Header()
+            FilterSection()
+            ListOfBookMarks()
+        }
     }
 }
 
@@ -48,6 +70,6 @@ fun MainPage() {
 @Composable
 fun GreetingPreview() {
     SnoozeProofTheme {
-        MainPage()
+        MainScreen(onNavigateToAddScreen = {})
     }
 }

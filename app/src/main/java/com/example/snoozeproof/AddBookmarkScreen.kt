@@ -1,0 +1,171 @@
+package com.example.snoozeproof
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
+
+@Composable
+fun AddBookmarkScreen() {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color(0xFFFFF9F9)
+    ) {
+        AddBookmarkScreenContent()
+    }
+}
+
+@Composable
+fun AddBookmarkScreenContent() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        var urlInput by remember { mutableStateOf("") }
+        var titleInput by remember { mutableStateOf("") }
+        var expanded by remember { mutableStateOf(false) }
+        var selectedPlatform by remember { mutableStateOf("Select Platform") }
+        val platforms = listOf("Youtube", "Instagram", "Chrome", "Medium", "Twitter", "GitHub", "Other")
+
+        Text(
+            text = "Add Bookmark",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            fontStyle = FontStyle.Italic,
+            color = Color(0xFF9C27B0),
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+
+        Text(
+            text = "URL (Link)",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFF4A4A4A),
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        OutlinedTextField(
+            value = urlInput,
+            onValueChange = { newValue -> urlInput = newValue },
+            placeholder = {
+                Text(
+                    text = "Paste your bookmark URL here...",
+                    color = Color.Gray.copy(alpha = 0.6f)
+                )
+            },
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFF8079BE),
+                unfocusedBorderColor = Color(0xFFFFD1DC)
+            )
+        )
+
+        Text(
+            text = "Title",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFF4A4A4A),
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        OutlinedTextField(
+            value = titleInput,
+            onValueChange = { newValue -> titleInput = newValue },
+            placeholder = {
+                Text(
+                    text = "Add title for your Bookmark",
+                    color = Color.Gray.copy(alpha = 0.6f)
+                )
+            },
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFF8079BE),
+                unfocusedBorderColor = Color(0xFFFFD1DC)
+            )
+        )
+
+        Text(
+            text = "Choose Platform",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFF4A4A4A),
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Surface(
+                onClick = { expanded = true },
+                shape = RoundedCornerShape(12.dp),
+                color = Color(0xFFFFF0F2),
+                border = BorderStroke(1.dp, Color(0xFFFFD1DC)),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = selectedPlatform, color = Color(0xFF4A4A4A))
+                    Text(text = "▼", color = Color(0xFF8079BE))
+                }
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier.fillMaxWidth(0.9f)
+            ) {
+                platforms.forEach { platformName ->
+                    DropdownMenuItem(
+                        text = { Text(text = platformName) },
+                        onClick = {
+                            selectedPlatform = platformName
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun AddBookmarkScreenPreview() {
+    AddBookmarkScreen()
+}
