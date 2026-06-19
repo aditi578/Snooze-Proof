@@ -57,7 +57,7 @@ fun MainScreen(onNavigateToAddScreen: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding) 
+                .padding(innerPadding)
         ) {
             Header()
             FilterSection()

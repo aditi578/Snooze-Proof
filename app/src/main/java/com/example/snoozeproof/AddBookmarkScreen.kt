@@ -8,12 +8,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,10 +27,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
+import kotlin.math.roundToInt
 
 @Composable
 fun AddBookmarkScreen() {
@@ -54,6 +57,9 @@ fun AddBookmarkScreenContent() {
         var expanded by remember { mutableStateOf(false) }
         var selectedPlatform by remember { mutableStateOf("Select Platform") }
         val platforms = listOf("Youtube", "Instagram", "Chrome", "Medium", "Twitter", "GitHub", "Other")
+
+        var sliderPosition by remember { mutableFloatStateOf(0f) }
+        val timeLabels = listOf("5 mins", "10 mins", "30 mins", "45 mins", "60+ mins")
 
         Text(
             text = "Add Bookmark",
@@ -160,6 +166,39 @@ fun AddBookmarkScreenContent() {
                     )
                 }
             }
+        }
+
+        Text(
+            text = "Time Commitment",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFF4A4A4A),
+            modifier = Modifier.padding(top = 8.dp)
+        )
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            val currentIndex = sliderPosition.roundToInt()
+            Text(
+                text = timeLabels[currentIndex],
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF9C27B0)
+            )
+
+            Slider(
+                value = sliderPosition,
+                onValueChange = { sliderPosition = it },
+                valueRange = 0f..4f,
+                steps = 3,
+                colors = SliderDefaults.colors(
+                    thumbColor = Color(0xFF8079BE),
+                    activeTrackColor = Color(0xFF8079BE),
+                    inactiveTrackColor = Color(0xFFFFD1DC)
+                )
+            )
         }
     }
 }
