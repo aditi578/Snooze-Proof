@@ -16,9 +16,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.snoozeproof.data.BookmarkDataClass
 
 @Composable
-fun WorkCard() {
+fun WorkCard(bookmark: BookmarkDataClass) {
     Surface(
         shape = RoundedCornerShape(24.dp),
         color = Color(0xFFFFD1DC),
@@ -32,14 +33,14 @@ fun WorkCard() {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = "Platform name",
+                text = bookmark.platformName,
                 fontSize = 14.sp,
                 color = Color(0xFF4A4A4A).copy(alpha = 0.7f),
                 fontWeight = FontWeight.Medium
             )
 
             Text(
-                text = "Bookmark name",
+                text = bookmark.bookmarkName,
                 fontSize = 20.sp,
                 color = Color(0xFF4A4A4A),
                 fontWeight = FontWeight.Bold
@@ -54,7 +55,7 @@ fun WorkCard() {
                     .align(Alignment.End)
             ) {
                 Text(
-                    text = "Time required",
+                    text = bookmark.timeRequired,
                     color = Color.White,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -68,5 +69,13 @@ fun WorkCard() {
 @Preview(showBackground = true)
 @Composable
 fun WorkCardPreview() {
-    WorkCard()
+    WorkCard(
+        bookmark = BookmarkDataClass(
+            bookmarkName = "Sample Title",
+            platformName = "YouTube",
+            timeRequired = "10 mins",
+            url = "https://youtube.com",
+            location = "Home"
+        )
+    )
 }

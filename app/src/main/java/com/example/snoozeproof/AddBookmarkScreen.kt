@@ -5,12 +5,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Slider
@@ -35,17 +42,17 @@ import androidx.compose.ui.text.style.TextAlign
 import kotlin.math.roundToInt
 
 @Composable
-fun AddBookmarkScreen() {
+fun AddBookmarkScreen(onSaveClick: (String, String, String, String, String) -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color(0xFFFFF9F9)
     ) {
-        AddBookmarkScreenContent()
+        AddBookmarkScreenContent(onSaveClick)
     }
 }
 
 @Composable
-fun AddBookmarkScreenContent() {
+fun AddBookmarkScreenContent(onSaveClick: (String, String, String, String, String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,6 +61,7 @@ fun AddBookmarkScreenContent() {
     ) {
         var urlInput by remember { mutableStateOf("") }
         var titleInput by remember { mutableStateOf("") }
+        var locationInput by remember { mutableStateOf("") }
         var expanded by remember { mutableStateOf(false) }
         var selectedPlatform by remember { mutableStateOf("Select Platform") }
         val platforms = listOf("Youtube", "Instagram", "Chrome", "Medium", "Twitter", "GitHub", "Other")
@@ -200,11 +208,73 @@ fun AddBookmarkScreenContent() {
                 )
             )
         }
+
+        Text(
+            text = "Trigger Location",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color(0xFF4A4A4A),
+            modifier = Modifier.padding(top = 8.dp)
+        )
+
+        OutlinedTextField(
+            value = locationInput,
+            onValueChange = { newValue -> locationInput = newValue },
+            placeholder = {
+                Text(
+                    text = "e.g., Home, Office, Gym...",
+                    color = Color.Gray.copy(alpha = 0.6f)
+                )
+            },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = "Location Icon",
+                    tint = Color(0xFF8079BE)
+                )
+            },
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFF8079BE),
+                unfocusedBorderColor = Color(0xFFFFD1DC)
+            )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                val currentIndex = sliderPosition.roundToInt()
+                val chosenTime = timeLabels[currentIndex]
+                onSaveClick(
+                    urlInput,
+                    titleInput,
+                    selectedPlatform,
+                    chosenTime,
+                    locationInput
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF9C27B0),
+                contentColor = Color.White
+            )
+        ) {
+            Text(
+                text = "Add to Vault",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
 @Composable
 @Preview
 fun AddBookmarkScreenPreview() {
-    AddBookmarkScreen()
+    AddBookmarkScreen(onSaveClick = { _, _, _, _, _ -> })
 }
