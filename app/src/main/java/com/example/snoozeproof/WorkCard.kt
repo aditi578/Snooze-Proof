@@ -1,5 +1,6 @@
 package com.example.snoozeproof
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,12 +22,15 @@ import com.example.snoozeproof.data.BookmarkDataClass
 
 @Composable
 fun WorkCard(bookmark: BookmarkDataClass) {
+    val uriHandler = LocalUriHandler.current
     Surface(
         shape = RoundedCornerShape(24.dp),
         color = Color(0xFFFFD1DC),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 8.dp)
+            .padding(horizontal = 20.dp, vertical = 8.dp).clickable {
+                uriHandler.openUri(bookmark.url)
+            }
     ) {
         Column(
             modifier = Modifier

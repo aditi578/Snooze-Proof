@@ -37,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import kotlin.math.roundToInt
@@ -68,6 +69,7 @@ fun AddBookmarkScreenContent(onSaveClick: (String, String, String, String, Strin
 
         var sliderPosition by remember { mutableFloatStateOf(0f) }
         val timeLabels = listOf("5 mins", "10 mins", "30 mins", "45 mins", "60+ mins")
+        val focusManager = LocalFocusManager.current
 
         Text(
             text = "Add Bookmark",
@@ -245,10 +247,18 @@ fun AddBookmarkScreenContent(onSaveClick: (String, String, String, String, Strin
 
         Button(
             onClick = {
+                focusManager.clearFocus()
+                val cleanUrl = urlInput.trim()
+
+                val finalUrl = if (cleanUrl.startsWith("https://") || cleanUrl.startsWith("http://")) {
+                    cleanUrl
+                } else {
+                    "https://$cleanUrl"
+                }
                 val currentIndex = sliderPosition.roundToInt()
                 val chosenTime = timeLabels[currentIndex]
                 onSaveClick(
-                    urlInput,
+                    finalUrl,
                     titleInput,
                     selectedPlatform,
                     chosenTime,
