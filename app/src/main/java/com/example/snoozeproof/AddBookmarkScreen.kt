@@ -25,21 +25,21 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextAlign
 import kotlin.math.roundToInt
 
 @Composable
@@ -63,7 +63,7 @@ fun AddBookmarkScreenContent(onSaveClick: (String, String, String, String, Strin
         var urlInput by remember { mutableStateOf("") }
         var titleInput by remember { mutableStateOf("") }
         var locationInput by remember { mutableStateOf("") }
-        var expanded by remember { mutableStateOf(false) }
+        var platformExpanded by remember { mutableStateOf(false) }
         var selectedPlatform by remember { mutableStateOf("Select Platform") }
         val platforms = listOf("Youtube", "Instagram", "Chrome", "Medium", "Twitter", "GitHub", "Other")
 
@@ -145,7 +145,7 @@ fun AddBookmarkScreenContent(onSaveClick: (String, String, String, String, Strin
             modifier = Modifier.fillMaxWidth()
         ) {
             Surface(
-                onClick = { expanded = true },
+                onClick = { platformExpanded = true },
                 shape = RoundedCornerShape(12.dp),
                 color = Color(0xFFFFF0F2),
                 border = BorderStroke(1.dp, Color(0xFFFFD1DC)),
@@ -162,8 +162,8 @@ fun AddBookmarkScreenContent(onSaveClick: (String, String, String, String, Strin
             }
 
             DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
+                expanded = platformExpanded,
+                onDismissRequest = { platformExpanded = false },
                 modifier = Modifier.fillMaxWidth(0.9f)
             ) {
                 platforms.forEach { platformName ->
@@ -171,7 +171,7 @@ fun AddBookmarkScreenContent(onSaveClick: (String, String, String, String, Strin
                         text = { Text(text = platformName) },
                         onClick = {
                             selectedPlatform = platformName
-                            expanded = false
+                            platformExpanded = false
                         }
                     )
                 }
@@ -255,12 +255,16 @@ fun AddBookmarkScreenContent(onSaveClick: (String, String, String, String, Strin
                 } else {
                     "https://$cleanUrl"
                 }
+
+                // Fallback to "Other" if user didn't pick a platform
+                val platformToSave = if (selectedPlatform == "Select Platform") "Other" else selectedPlatform
+
                 val currentIndex = sliderPosition.roundToInt()
                 val chosenTime = timeLabels[currentIndex]
                 onSaveClick(
                     finalUrl,
                     titleInput,
-                    selectedPlatform,
+                    platformToSave,
                     chosenTime,
                     locationInput
                 )
